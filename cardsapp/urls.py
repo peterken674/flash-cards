@@ -1,19 +1,13 @@
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
-from . import views
+from django.conf.urls import url
+from flashapp import views
+
 
 urlpatterns = [
-    path('', views.homepage, name='homepage'),
-    path('signup/', views.signup, name="signup"),
-    path('', include('django.contrib.auth.urls')),
-    path('add-deck', views.add_deck, name="add-deck"),
-    path('deck/<deck>', views.deck, name="deck"),
-    path('add-card/<deck>', views.add_card, name="add-card"),
-    path('delete/<card>',views.delete_view, name="delete"),
-    path('update/',views.delete_view, name="update"),
-    path('edit-card/<card>', views.edit_card, name="edit-card") 
+    
+    url(r'^api/profiles/', views.ProfileList.as_view()),
+    url(r'^api/flashcards/', views.FlashcardList.as_view()),
+    url(r'^api/notes/', views.NoteList.as_view()),
+    url(r'api/profile/profile-id/(?P<pk>[0-9]+)/$',views.ProfileList.as_view()),
+    url(r'api/flashcards/flashcard-id/(?P<pk>[0-9]+)/$',views.flashcardList.as_view()),
+    url(r'api/notes/notes-id/(?P<pk>[0-9]+)/$',views.ProfileList.as_view())
 ]
-
-if settings.DEBUG:
-    urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
