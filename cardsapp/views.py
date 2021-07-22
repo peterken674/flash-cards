@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from .models import Profile, FlashCard, Note
-from .serializers import ProfileSerializer, FlashcardSerializer, NoteSerializer
+from .serializer import ProfileSerializer, FlashcardSerializer, NoteSerializer
 
 
 class ProfileList(APIView):
