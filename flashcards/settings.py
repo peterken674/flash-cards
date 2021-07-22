@@ -11,52 +11,25 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
 import os
 import dj_database_url
-
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-from decouple import config, Csv
-import django_heroku
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-MODE=config("MODE", default="dev")
+# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
-
+SECRET_KEY = 'django-insecure-9kyv(+jwvvbaa+qmlnwh3!wm&fc9)91+!&@6p3g7+t=3#hs*va'
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = True
 
-if config('MODE')=="dev":
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.postgresql_psycopg2',
-           'NAME': config('DB_NAME'),
-           'USER': config('DB_USER'),
-           'PASSWORD': config('DB_PASSWORD'),
-           'HOST': config('DB_HOST'),
-           'PORT': '',
-       }
-       
-   }
-# production
-else:
-   DATABASES = {
-       'default': dj_database_url.config(
-           default=config('DATABASE_URL')
-       )
-   }
-
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -68,14 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
-    'rest_framework'
-=======
     'cardsapp',
     'bootstrap5',
     'cloudinary',
     'rest_framework',
->>>>>>> 3114d3c07d7b357c60dec8bfcbf93b5b49a7663e
 ]
 
 MIDDLEWARE = [
@@ -86,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'flashcards.urls'
@@ -101,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -110,20 +81,19 @@ WSGI_APPLICATION = 'flashcards.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'flashcards',
-        'USER': 'peterken',
-        'PASSWORD': 'pa55'
+        'NAME': 'flashcard',
+        'USER': 'gabriel',
+        'PASSWORD': 'gazajoga'
     }
 }
-
-
 # Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -142,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/3.2/topics/i18n/
+# https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -155,28 +125,34 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# configuring the location for media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-cloudinary.config( 
-  cloud_name = config('CLOUD_NAME'), 
-  api_key = config('API_KEY'), 
-  api_secret = config('API_SECRET') 
-)
 
+cloudinary.config( 
+  cloud_name = "moringa", 
+  api_key = "122276654221999", 
+  api_secret = "ZVEQ0P4nbe2BALTPww7zTjmnCUI" 
+) 
+
+
+# Configure Django App for Heroku.
 django_heroku.settings(locals())
+
+
